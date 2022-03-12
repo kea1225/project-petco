@@ -3,6 +3,7 @@ version: '3.8'
 services:
   config-server:
     image: "${IMAGE_TAG_CONFIG_SERVER}"
+<<<<<<< HEAD
     deploy:
       resources:
         limits:
@@ -18,92 +19,151 @@ services:
       resources:
         limits:
           memory: 512M
+=======
+    networks:
+      - clarusnet
+    ports:
+      - 8888:8888
+
+  discovery-server:
+    image: "${IMAGE_TAG_DISCOVERY_SERVER}"
+>>>>>>> feature/msp-20
     depends_on:
       - config-server
     entrypoint: ["./dockerize","-wait=tcp://config-server:8888","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
       - clarusnet
     ports:
+<<<<<<< HEAD
      - 8761:8761
+=======
+      - 8761:8761
+>>>>>>> feature/msp-20
 
   customers-service:
     image: "${IMAGE_TAG_CUSTOMERS_SERVICE}"
     deploy:
+<<<<<<< HEAD
       resources:
         limits:
           memory: 512M
+=======
+>>>>>>> feature/msp-20
       replicas: 3
       update_config:
           parallelism: 2
           delay: 5s
           order: start-first
     depends_on:
+<<<<<<< HEAD
      - config-server
      - discovery-server
+=======
+      - config-server
+      - discovery-server
+>>>>>>> feature/msp-20
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
       - clarusnet
     ports:
+<<<<<<< HEAD
     - 8081:8081
+=======
+      - 8081:8081
+>>>>>>> feature/msp-20
 
   visits-service:
     image: "${IMAGE_TAG_VISITS_SERVICE}"
     deploy:
+<<<<<<< HEAD
       resources:
         limits:
           memory: 512M
+=======
+>>>>>>> feature/msp-20
       replicas: 3
       update_config:
           parallelism: 2
           delay: 5s
           order: start-first
     depends_on:
+<<<<<<< HEAD
      - config-server
      - discovery-server
+=======
+      - config-server
+      - discovery-server
+>>>>>>> feature/msp-20
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
       - clarusnet
     ports:
+<<<<<<< HEAD
      - 8082:8082
+=======
+      - 8082:8082
+>>>>>>> feature/msp-20
 
   vets-service:
     image: "${IMAGE_TAG_VETS_SERVICE}"
     deploy:
+<<<<<<< HEAD
       resources:
         limits:
           memory: 512M
+=======
+>>>>>>> feature/msp-20
       replicas: 3
       update_config:
           parallelism: 2
           delay: 5s
           order: start-first
     depends_on:
+<<<<<<< HEAD
      - config-server
      - discovery-server
+=======
+      - config-server
+      - discovery-server
+>>>>>>> feature/msp-20
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
       - clarusnet
     ports:
+<<<<<<< HEAD
      - 8083:8083
+=======
+      - 8083:8083
+>>>>>>> feature/msp-20
 
   api-gateway:
     image: "${IMAGE_TAG_API_GATEWAY}"
     deploy:
+<<<<<<< HEAD
       resources:
         limits:
           memory: 512M
       replicas: 5
+=======
+      replicas: 3
+>>>>>>> feature/msp-20
       update_config:
           parallelism: 2
           delay: 5s
           order: start-first
     depends_on:
+<<<<<<< HEAD
      - config-server
      - discovery-server
+=======
+      - config-server
+      - discovery-server
+>>>>>>> feature/msp-20
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
       - clarusnet
     ports:
+<<<<<<< HEAD
      - 8080:8080
 
   tracing-server:
@@ -128,10 +188,29 @@ services:
     depends_on:
      - config-server
      - discovery-server
+=======
+      - 8080:8080
+
+  tracing-server:
+    image: openzipkin/zipkin
+    environment:
+      - JAVA_OPTS=-XX:+UnlockExperimentalVMOptions -Djava.security.egd=file:/dev/./urandom
+    networks:
+      - clarusnet
+    ports:
+      - 9411:9411
+
+  admin-server:
+    image: "${IMAGE_TAG_ADMIN_SERVER}"
+    depends_on:
+      - config-server
+      - discovery-server
+>>>>>>> feature/msp-20
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
       - clarusnet
     ports:
+<<<<<<< HEAD
      - 9090:9090
 
   hystrix-dashboard:
@@ -143,16 +222,30 @@ services:
     depends_on:
      - config-server
      - discovery-server
+=======
+      - 9090:9090
+
+  hystrix-dashboard:
+    image: "${IMAGE_TAG_HYSTRIX_DASHBOARD}"
+    depends_on:
+      - config-server
+      - discovery-server
+>>>>>>> feature/msp-20
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
       - clarusnet
     ports:
+<<<<<<< HEAD
      - 7979:7979
+=======
+      - 7979:7979
+>>>>>>> feature/msp-20
 
   ## Grafana / Prometheus
 
   grafana-server:
     image: "${IMAGE_TAG_GRAFANA_SERVICE}"
+<<<<<<< HEAD
     deploy:
       resources:
         limits:
@@ -173,6 +266,20 @@ services:
     ports:
     - 9091:9090
   
+=======
+    networks:
+      - clarusnet
+    ports:
+      - 3000:3000
+
+  prometheus-server:
+    image: "${IMAGE_TAG_PROMETHEUS_SERVICE}"
+    networks:
+      - clarusnet
+    ports:
+      - 9091:9090
+    
+>>>>>>> feature/msp-20
   mysql-server:
     image: mysql:5.7.8
     environment: 
